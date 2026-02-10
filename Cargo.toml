@@ -38,7 +38,7 @@ mocks = { path = "programs/mocks", package = "mocks" }
 id-crate = { path = "id-crate" }
 marginfi-type-crate = { path = "type-crate" }
 
-pyth-solana-receiver-sdk = "1.1.0"
+pyth-solana-receiver-sdk = "1.0.0"
 # pythnet-sdk = "2.3.1"
 switchboard-on-demand = "0.11.3"
 
