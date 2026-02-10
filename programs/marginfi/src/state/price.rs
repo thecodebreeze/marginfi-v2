@@ -4,6 +4,7 @@ use crate::constants::{
 };
 use crate::state::bank_config::BankConfigImpl;
 use crate::{check, check_eq, debug, live, math_error, prelude::*};
+use anchor_lang::Discriminator;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{borsh1::try_from_slice_unchecked, stake::state::StakeStateV2};
 use anchor_spl::token::Mint;
@@ -1059,7 +1060,7 @@ pub fn load_price_update_v2_checked(ai: &AccountInfo) -> MarginfiResult<PriceUpd
 
     let price_feed_data = ai.try_borrow_data()?;
     let discriminator = &price_feed_data[0..8];
-    let expected_discrim = <PriceUpdateV2 as anchor_lang::Discriminator>::DISCRIMINATOR;
+    let expected_discrim = PriceUpdateV2::DISCRIMINATOR;
 
     check_eq!(
         discriminator,
