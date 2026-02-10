@@ -1028,7 +1028,7 @@ pub fn parse_swb_ignore_alignment(data: Ref<&mut [u8]>) -> MarginfiResult<PullFe
         return err!(MarginfiError::SwitchboardInvalidAccount);
     }
 
-    if data[..8] != PullFeedAccountData::DISCRIMINATOR {
+    if data[..8] != *PullFeedAccountData::DISCRIMINATOR {
         return err!(MarginfiError::SwitchboardInvalidAccount);
     }
 
@@ -1059,7 +1059,7 @@ pub fn load_price_update_v2_checked(ai: &AccountInfo) -> MarginfiResult<PriceUpd
 
     let price_feed_data = ai.try_borrow_data()?;
     let discriminator = &price_feed_data[0..8];
-    let expected_discrim = <PriceUpdateV2 as anchor_lang::Discriminator>::DISCRIMINATOR;
+    let expected_discrim = PriceUpdateV2::DISCRIMINATOR;
 
     check_eq!(
         discriminator,
