@@ -4,7 +4,6 @@ use crate::constants::{
 };
 use crate::state::bank_config::BankConfigImpl;
 use crate::{check, check_eq, debug, live, math_error, prelude::*};
-use anchor_lang::Discriminator;
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{borsh1::try_from_slice_unchecked, stake::state::StakeStateV2};
 use anchor_spl::token::Mint;
@@ -22,8 +21,10 @@ use pyth_solana_receiver_sdk::price_update::{self, FeedId, PriceUpdateV2};
 use pyth_solana_receiver_sdk::PYTH_PUSH_ORACLE_ID;
 use std::{cell::Ref, cmp::min};
 use switchboard_on_demand::{
-    CurrentResult, Discriminator, PullFeedAccountData, SPL_TOKEN_PROGRAM_ID,
+    CurrentResult, PullFeedAccountData, SPL_TOKEN_PROGRAM_ID, Discriminator as _
 };
+
+const PRICE_UPDATE_V2_DISCRIMINATOR: &'static [u8] = &[34, 241, 35, 99, 157, 126, 244, 205];
 
 #[derive(Copy, Clone, Debug)]
 pub enum PriceBias {
@@ -1060,7 +1061,7 @@ pub fn load_price_update_v2_checked(ai: &AccountInfo) -> MarginfiResult<PriceUpd
 
     let price_feed_data = ai.try_borrow_data()?;
     let discriminator = &price_feed_data[0..8];
-    let expected_discrim = PriceUpdateV2::DISCRIMINATOR;
+    let expected_discrim = PRICE_UPDATE_V2_DISCRIMINATOR;
 
     check_eq!(
         discriminator,
